@@ -1,12 +1,18 @@
 import {combineReducers} from 'redux';
-import {updateStaffInfo, toggleStaffUp, setActiveStaffId} from './reducers_desks';
+import {toggleStaffUp} from './seats/seats_reducers';
+import {updateStaffInfo, setActiveStaffId} from './common/common_reducers'
+import {setRedirectUrl, toggleLoggedIn, setUserToken} from './authentication/authentication_reducers'
+
 
 
 const rootReducer = combineReducers(
       {
         staffUp:toggleStaffUp,
         activeStaffId:setActiveStaffId,
-        staffInfo:updateStaffInfo
+        staffInfo:updateStaffInfo,
+        isLoggedIn:toggleLoggedIn,
+        redirectUrl:setRedirectUrl,
+        userToken:setUserToken
       }
   );
 

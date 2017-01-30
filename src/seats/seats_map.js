@@ -1,16 +1,21 @@
 import React from 'react';
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {updateStaffInfo,setActiveStaffId,toggleStaffUp} from '../actions/actions'
-import {desks} from '../assets/seats';
-import {deskCentroids} from '../assets/desk_centroids'
+import {toggleStaffUp} from './seats_actions'
+import {updateStaffInfo,setActiveStaffId} from '../common/common_actions'
+import {desks} from './seats_svg';
+import {deskCentroids} from './seats_desk_centroids'
 import {deskMap} from '../selectors/staff_desks'
 import R from 'ramda';
 
 const SeatMap = (props) => {
+
+// selector to give staff - desk mapping
+
   
-  const opacityChanger = ()=>{
-    if(props.staffUp){
+  const opacityChanger = ( ) => 
+  { 
+    if(props.staffUp) {
       return {
         opacity:0.3,
         pointerEvents:'none'
@@ -18,21 +23,37 @@ const SeatMap = (props) => {
     }
   }
 
+// logic to pick up staff and change id
+
+// on first click set staffUp to true and set activeStaffId
   const firstClick=(e)=>{
-      e.stopPropagation();
-      let tempStaffUp = props.staffUp
-      if(!tempStaffUp){
-            props.setActiveStaffId(e.target.id);
-          }
-      props.toggleStaffUp();
-    }
+    e.stopPropagation();
+    let tempStaffUp = props.staffUp
+    if(!tempStaffUp){
+          props.setActiveStaffId(e.target.id);
+        }
+    props.toggleStaffUp();
+  }
+
+
+// on second click check if someone in target seat -> if yes unallocate them
+// then change active staff and 
   const secondClick=(e)=>{
-        let tempStaffUp = props.staffUp
-        if(tempStaffUp&&(e.target.id!=='overlay')){
-              props.updateStaffInfo({deskId:e.target.id},props.activeStaffId);
-              props.toggleStaffUp();
-            }
-      }
+
+    const currentSitter = R.filter(R.propEq('deskId',e.targetId), props.staffInfo)
+    console.log(currentSitter)  
+    if (!R.isEmpty(currentSitter)){
+      props.updateStaffInfo({deskId:''},Object.keys(currentSitter)[0])
+    }
+    let tempStaffUp = props.staffUp
+    if(tempStaffUp&&(e.target.id!=='overlay')){
+          // R.filter()
+          // props.updateStaffInfo({deskId:e.target.id},e.target.id)
+          props.updateStaffInfo({deskId:e.target.id},props.activeStaffId);
+          props.toggleStaffUp();
+        }
+  }
+
 
   function Staffsymbol(props) {
     return (
@@ -55,19 +76,19 @@ const SeatMap = (props) => {
       )
   }
 
-  const StaffRenderer = (val,key)=>{
-            console.log(val)
-            if (!!val&&val.includes('desk')){
+  const StaffRenderer = (staffObj)=>{
+    console.log(staffObj)
+            if (!R.isEmpty(staffObj)&&staffObj.deskId.includes('desk')){
               return(
                 <Staffsymbol  
-                  x={deskCentroids[val][0]}
-                  y={deskCentroids[val][1]}
-                  name={props.staffInfo[key].name}
-                  id={key}>
+                  x={deskCentroids[staffObj.deskId][0]}
+                  y={deskCentroids[staffObj.deskId][1]}
+                  name={staffObj.name}
+                  id={staffObj.id}>
                 </Staffsymbol>
               )
             }else{
-              return 
+              return null
             }   
           }
   
@@ -81,7 +102,7 @@ const SeatMap = (props) => {
           onClick={secondClick}
           >
         {desks}
-        {Object.values(R.mapObjIndexed(StaffRenderer, deskMap(props.staffInfo)))}
+        {Object.values(R.map(StaffRenderer, props.staffInfo))}
         </svg>
       </div>
     )

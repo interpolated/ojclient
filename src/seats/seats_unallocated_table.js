@@ -1,14 +1,15 @@
 import React from 'react';
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {updateStaffInfo,setActiveStaffId,toggleStaffUp} from '../actions/actions'
-import {desks} from '../assets/seats';
-import {deskCentroids} from '../assets/desk_centroids'
+import {toggleStaffUp} from './seats_actions'
+import {updateStaffInfo,setActiveStaffId} from '../common/common_actions'
+import {desks} from './seats_svg';
+import {deskCentroids} from './seats_desk_centroids'
 import {noDeskStaff} from '../selectors/staff_desks'
 import R from 'ramda';
 import { denormalize, schema } from 'normalizr';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-import {Row,Col,ButtonGroup, Button,Container} from 'reactstrap'
+import {Row,Col,ButtonGroup, Button,Container} from 'react-bootstrap'
 
 
 
@@ -17,9 +18,11 @@ const UnallocatedTable = (props) => {
   const mySchema = { users: [ user ] }
   let entities = { users: props.staffInfo };
   let denormalizedData = denormalize({ users: Object.keys(props.staffInfo) }, mySchema, entities);
-  console.log(denormalizedData)
+
+  // the above is equivalent to Object.values(props.staffInfo)
   
   const onRowClick= (row)=>{
+    console.log(denormalizedData)
     if(!props.staffUp){
         props.setActiveStaffId(row.id)
         props.toggleStaffUp()
@@ -27,9 +30,6 @@ const UnallocatedTable = (props) => {
   }
 
   const unAllocate = (e)=>{
-    console.log('woooo')
-    console.log(props.activeStaffId)
-    console.log(props.staffUp)
     if(props.staffUp){
       props.updateStaffInfo({deskId:e.target.id},props.activeStaffId)
       props.toggleStaffUp()
@@ -46,6 +46,7 @@ const UnallocatedTable = (props) => {
     onRowClick: onRowClick
   };  
 
+  // console.log(denormalizedData.users)
   return (  
       <div>
         <div onClick={staffDown}>
@@ -58,19 +59,17 @@ const UnallocatedTable = (props) => {
           search
           condensed>
               <TableHeaderColumn isKey dataField='id'>Staff ID</TableHeaderColumn>
-              <TableHeaderColumn dataField='name'   >Name</TableHeaderColumn>
-              <TableHeaderColumn dataField='deskId'   >Status</TableHeaderColumn>
+              <TableHeaderColumn dataField='name'    >Name</TableHeaderColumn>
+              <TableHeaderColumn dataField='deskId'  >Status</TableHeaderColumn>
           </BootstrapTable>
         </div>
         <Row>
-          <Container>
-            <Container>
+
               <br/>
               <Button onClick={unAllocate} color="secondary" size="md" block id=''>unallocate</Button>  
               <Button onClick={unAllocate} color="secondary" size="md" block id='metro'>metro</Button>  
               <Button onClick={unAllocate} color="secondary" size="md" block id='left'>left</Button>  
-            </Container>
-          </Container>
+
         </Row>
       </div>
     )    
