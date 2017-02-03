@@ -11,7 +11,7 @@ export function setRedirectUrl(state = '', action){
   }
 }
 
-export function toggleLoggedIn(state = false, action){
+export function toggleLoggedIn(state = true, action){
   switch(action.type){
   case TOGGLE_LOGGED_IN:
     return !state   
@@ -20,7 +20,7 @@ export function toggleLoggedIn(state = false, action){
   }
 }
 
-export function setUserToken(state = '', action){
+export function setUserToken(state = '1810859d7f2eee422917d31b35030c4bb5992ed1', action){
   switch(action.type){
   case SET_USER_TOKEN:
     return action.payload   

@@ -30,13 +30,16 @@ const UnallocatedTable = (props) => {
   }
 
   const unAllocate = (e)=>{
+    e.stopPropagation()
     if(props.staffUp){
       props.updateStaffInfo({deskId:e.target.id},props.activeStaffId)
       props.toggleStaffUp()
+      console.log('down!')
+
     }
   }
 
-  const staffDown = ()=>{
+  const  staffDown  = ()=>{
     if(props.staffUp){
       props.toggleStaffUp()
     }
@@ -52,6 +55,21 @@ const UnallocatedTable = (props) => {
         <div onClick={staffDown}>
           <BootstrapTable 
           height={'400'}
+          // set table style offsets to 15
+          containerStyle={ {
+            marginTop: 5,
+            marginBottom: 5,
+            marginRight: 10,
+            marginLeft: 10,
+          } }
+
+          tableStyle={ {
+            marginTop: 5,
+            marginBottom: 5,
+            marginRight: 5,
+            marginLeft: 5,
+          } }
+
           data={denormalizedData.users} 
           options = {options}
           hover
@@ -60,17 +78,17 @@ const UnallocatedTable = (props) => {
           condensed>
               <TableHeaderColumn isKey dataField='id'>Staff ID</TableHeaderColumn>
               <TableHeaderColumn dataField='name'    >Name</TableHeaderColumn>
-              <TableHeaderColumn dataField='deskId'  >Status</TableHeaderColumn>
+              <TableHeaderColumn dataField='deskId'  >Location</TableHeaderColumn>
+              <TableHeaderColumn dataField='skills'  >Skills</TableHeaderColumn>
           </BootstrapTable>
+        <div  className={"container-fluid"}>
+        <br/>
+          <Button onClick={unAllocate} color="secondary" size="md" block id=''>unallocate</Button>  
+          <Button onClick={unAllocate} color="secondary" size="md" block id='left'>left</Button>  
+          <Button onClick={unAllocate} color="secondary" size="md" block id='metro'>metro</Button>  
         </div>
-        <Row>
+        </div>
 
-              <br/>
-              <Button onClick={unAllocate} color="secondary" size="md" block id=''>unallocate</Button>  
-              <Button onClick={unAllocate} color="secondary" size="md" block id='metro'>metro</Button>  
-              <Button onClick={unAllocate} color="secondary" size="md" block id='left'>left</Button>  
-
-        </Row>
       </div>
     )    
 

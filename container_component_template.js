@@ -9,37 +9,26 @@ import {fetchStaffInfo} from '../common/common_actions'
 class Seats extends Component {
   
   componentWillMount(){
-    console.log(this.props.userToken)
-    this.props.fetchStaffInfo(this.props.userToken)
   }
 
   render() {
     return (
-      <div className="container-fluid">
-        <Row>
-          <Row>
-            <Col md="8">
-              <SeatMap/>
-            </Col>
-            <Col md="4">
-              <UnallocatedTable/ >
-            </Col>
-          </Row>
-          </Row>
-      </div>
+    <div>
+     yah
+    </div>
     );
   }
 }
 
 
-const mapStateToProps = ( {userToken} ) => {
+const mapStateToProps = ( {BITSOFSTATE} ) => {
   return {
-    userToken
+    BITSOFSTATE
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({fetchStaffInfo}, dispatch)
+  return bindActionCreators({ACTIONCREATOR}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Seats);

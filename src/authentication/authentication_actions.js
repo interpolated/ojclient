@@ -1,4 +1,4 @@
-import {updateAllStaffInfo} from '../common/common_actions'
+import {fetchStaffInfo} from '../common/common_actions'
 import {browserHistory} from 'react-router';
 import axios from 'axios'
 
@@ -39,8 +39,8 @@ export function logIn(username,password){
       return response
     }).then((response)=>{
       console.log(response)
-      // updateAllStaffInfo could be a universal load state call - probably better that way. Keeping like this for now.
-      dispatch(updateAllStaffInfo(response.data.token)) 
+      // fetchStaffInfo could be a universal load state call - probably better that way. Keeping like this for now.
+      dispatch(fetchStaffInfo(response.data.token)) 
     }).then(()=>{
       browserHistory.replace('/seats')
     }).catch(error=>{

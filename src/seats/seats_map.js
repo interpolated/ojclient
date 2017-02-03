@@ -40,8 +40,7 @@ const SeatMap = (props) => {
 // then change active staff and 
   const secondClick=(e)=>{
 
-    const currentSitter = R.filter(R.propEq('deskId',e.targetId), props.staffInfo)
-    console.log(currentSitter)  
+    const currentSitter = R.filter(R.propEq('deskId',e.target.id), props.staffInfo)
     if (!R.isEmpty(currentSitter)){
       props.updateStaffInfo({deskId:''},Object.keys(currentSitter)[0])
     }
