@@ -44,12 +44,14 @@ export function fetchStaffInfo(authToken){
     axios.get('http://localhost:8000/api/staffmembers/',{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
+      console.log(response)
       // this adds entity.staffMembers and will look for staffMembers:[list]
       const staffMember = new schema.Entity('staffMembers');
       // this makes the whole schema -> in this case only one entity
       const staffSchema = { staffMembers: [ staffMember ] }
       // first argument of normalize is data, looking for key staffMembers (as per schema entity), sencond argument is the entire schema.
-      const normalizedData = normalize({staffMembers: response.data.results}, staffSchema);
+      const normalizedData = normalize({staffMembers: response.data}, staffSchema);
+      console.log(normalizedData)
       dispatch(
         {
           type:UPDATE_ALL_STAFF_INFO,

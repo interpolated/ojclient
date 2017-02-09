@@ -92,12 +92,12 @@ const SeatMap = (props) => {
           }
   
   return(
-      <div >
-        <svg id="overlay"  
+      <div id="svgcontainer">
+        <svg id="overlay"
           version="1.1" 
           xmlns="http://www.w3.org/2000/vsg" 
           xmlnsXlink="http://www.w3.org/1999/xlink" 
-          viewBox="0 0 420.0 297.0"
+          viewBox="10 10 420 297"
           onClick={secondClick}
           >
         {desks}

@@ -51,7 +51,7 @@ const App = (props) =>{
                 :(<NotLoggedInNav/>)}
           </Navbar>
       </div>
-      <div>
+      <div className="container-fluid">
         {props.children}
       </div>
     </div>

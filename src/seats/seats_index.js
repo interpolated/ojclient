@@ -15,18 +15,14 @@ class Seats extends Component {
 
   render() {
     return (
-      <div className="container-fluid">
-        <Row>
-          <Row>
-            <Col md="8">
-              <SeatMap/>
-            </Col>
+          <div className="container-fluid">
             <Col md="4">
               <UnallocatedTable/ >
             </Col>
-          </Row>
-          </Row>
-      </div>
+            <Col md="8">
+              <SeatMap/>
+            </Col>
+          </div>
     );
   }
 }
