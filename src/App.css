@@ -17,6 +17,9 @@
 }
 
 svg {width: 100%; height: auto;}
+.text {
+    pointer-events: none;
+}
 
 polygon{
   fill:gray;

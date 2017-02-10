@@ -5,6 +5,7 @@ import App from './App';
 import './index.css';
 import Seats from './seats/seats_index';
 import Staff from './staff/staff_index';
+import Projects from './projects/projects_index';
 import LoginForm from './authentication/login_component';
 import LoginRequiredContainer from './authentication/login_required_container';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -31,6 +32,7 @@ ReactDOM.render(
         <Route component={LoginRequiredContainer}>
           <Route path='seats' component={Seats}/>
           <Route path='staff' component={Staff}/>
+          <Route path='projects' component={Projects}/>
         </Route>
       </Route>
     </Router>

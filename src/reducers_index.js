@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import {toggleStaffUp} from './seats/seats_reducers';
 import {setActiveAllocations,setActiveSkills} from './staff/staff_reducers';
+import {setStaffAllocations} from './projects/projects_reducers';
 import {updateStaffInfo, setActiveStaffId} from './common/common_reducers'
 import {setRedirectUrl, toggleLoggedIn, setUserToken} from './authentication/authentication_reducers'
 
@@ -11,6 +12,7 @@ const rootReducer = combineReducers(
         staffUp:toggleStaffUp,
         activeStaffId:setActiveStaffId,
         activeStaffAllocations:setActiveAllocations,
+        staffAllocations:setStaffAllocations,
         activeStaffSkills:setActiveSkills,
         staffInfo:updateStaffInfo,
         isLoggedIn:toggleLoggedIn,
