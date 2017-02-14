@@ -16,6 +16,25 @@ import R from 'ramda';
 import AllocationGraph  from './projects_allocation_graph';
 
 
+// activeProject{
+//   id,
+//   name,
+//   startDate,
+//   endDate,
+//   allocatedStaff,
+//   milestones,
+//   description,
+//   sector,
+//   budget
+// }
+
+// form component - name, description, sector, budget
+
+// date component - start, end
+// milestone form - add to date
+
+// allocation graph - this is done
+
 export default class Projects extends Component {
   
   componentWillMount(){

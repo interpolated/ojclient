@@ -27,17 +27,18 @@ const ProjectCard = (props)=>{
     </Col>
     )
 }
+
+
 const SkillCard = (props)=>{
   return (
-      <Col md="3">
-        <Panel>
-          <h4>{props.name}</h4>
+      <Col md="3"  >
+        <Panel style={{backgroundColor:'#E89898'}}>
+          <h4><strong>{props.name}</strong></h4>
           <h6>{props.description}</h6>
         </Panel>
       </Col>
     )
 }
-
 
 
 const StaffDetail = (props) => {
@@ -82,11 +83,7 @@ const StaffDetail = (props) => {
       <div>Select Staff</div>
     )
   }
-
-
-
 }
-
 
 const mapStateToProps = ( {staffInfo,activeStaffId,activeStaffAllocations,activeStaffSkills} ) => {
   return {

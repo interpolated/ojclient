@@ -11,35 +11,30 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 // import 3rd party libraries
 import R from 'ramda';
 import {BarChart, ComposedChart,Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+
 // import actions
-import setStaffAllocation  from "./projects_actions";
+import setStaffAllocation  from './projects_actions';
 
 class AllocationGraph extends Component {
   
+  // Takes data with keys date and allocation percentage
+
+
   constructor(props) {
     super(props);
     this.state = {
       drawActive: false,
-      data: [
-        {name: 'Page A', uv: 0.25, total:1},
-        {name: 'Page B', uv: 0.25, total:0},
-        {name: 'Page C', uv: 0.5, total:1},
-        {name: 'Page D', uv: 0.5, total:1},
-        {name: 'Page E', uv: 0.5, total:1},
-        {name: 'Page F', uv: 0.5, total:1}
-      ]
+      // data: [
+      //   {name: 'Page A', pt:0.25, total:1},
+      //   {name: 'Page B', allocationPercentage: 0.25, pt:0.25, total:0},
+      //   {name: 'Page C', allocationPercentage: 0.5, pt:0.25, total:1},
+      //   {name: 'Page D', allocationPercentage: 0.5, pt:0.25, total:1},
+      //   {name: 'Page E', allocationPercentage: 0.5, pt:0.25, total:1},
+      //   {name: 'Page F', allocationPercentage: 0.5, total:1}
+      // ]
     };
   }  
 
-  _onMouseDown = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    this.setState({drawActive:true})
-  }
-
-  _onMouseLeave = (e) => {
-    this.setState({drawActive:false})
-  }
 
   counts = [0, 0.25, 0.5, 0.75,  1]
   
@@ -50,12 +45,26 @@ class AllocationGraph extends Component {
     })
   };
 
+  _onMouseDown = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.setState({drawActive:true})
+    }      
+  
+
+  _onMouseLeave = (e) => {
+    this.setState({drawActive:false})
+  }
+
+
   _onMouseMove = (e) => {
 
-    if(this.state.drawActive==true&&R.contains(e.activeLabel,R.pluck('name', this.state.data))){
-      var changedIndex = R.findIndex(R.propEq('name', e.activeLabel))(this.state.data)
-      var changedObj = R.merge(this.state.data[changedIndex], {uv:this.closest((300-e.chartY)/300)})
-      this.setState({data:R.update(changedIndex,changedObj,this.state.data)})
+      console.log('woo')
+    if(this.state.drawActive==true&&R.contains(e.activeLabel,R.pluck('date', this.props.allocation))){
+      var changedIndex = R.findIndex(R.propEq('date', e.activeLabel))(this.props.allocation)
+      // take 30 off chart height to allow for X axis.... #todo add height as prop
+      var changedObj = R.merge(this.props.allocation[changedIndex], {allocationPercentage:this.closest((270-e.chartY)/270)})
+      this.props.setStaffAllocation({data:R.update(changedIndex,changedObj,this.props.allocation)}, this.props.activeStaffId)
     }      
   }
 
@@ -73,7 +82,7 @@ class AllocationGraph extends Component {
             onMouseLeave={this._onMouseLeave.bind(this)}
             width={600} 
             height={300} 
-            data={this.state.data}
+            data={this.props.allocation}
             barGap={'1em'}
             barCategoryGap={'1%'}
             margin={{top: 6, right: 30, left: 20, bottom: 5}}>
@@ -82,12 +91,13 @@ class AllocationGraph extends Component {
             stroke='#A59E9E'
             height={0.2}
             vertical={false}/>
-          <XAxis dataKey="name" style={{ pointerEvents: 'none' }}/>
+          <XAxis dataKey="date" style={{ pointerEvents: 'none' }}/>
           <Area type='monotone' dataKey='total' fill='none' stroke='none'/>
           <Bar             
-              isAnimationActive = {false}
-              dataKey="uv" 
-              fill="#C5C3F5" />
+            isAnimationActive = {false}
+            dataKey="allocationPercentage" 
+            stackId='a' 
+            fill="#C5C3F5" />
           </ComposedChart>
         </div>
       </Col>
