@@ -20,7 +20,7 @@ export function toggleLoggedIn(state = true, action){
   }
 }
 
-export function setUserToken(state = 'dbfc98661fb054e28e8b555bf93764e523ffd6f0', action){
+export function setUserToken(state = '6420605405927a3e417d6da8bb60bd6f6e943a95', action){
   switch(action.type){
   case SET_USER_TOKEN:
     return action.payload   

@@ -15,7 +15,7 @@ import {BarChart, ComposedChart,Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
 // import actions
 import setStaffAllocation  from './projects_actions';
 
-class AllocationGraph extends Component {
+class SetAllocationGraph extends Component {
   
   // Takes data with keys date and allocation percentage
 
@@ -24,14 +24,6 @@ class AllocationGraph extends Component {
     super(props);
     this.state = {
       drawActive: false,
-      // data: [
-      //   {name: 'Page A', pt:0.25, total:1},
-      //   {name: 'Page B', allocationPercentage: 0.25, pt:0.25, total:0},
-      //   {name: 'Page C', allocationPercentage: 0.5, pt:0.25, total:1},
-      //   {name: 'Page D', allocationPercentage: 0.5, pt:0.25, total:1},
-      //   {name: 'Page E', allocationPercentage: 0.5, pt:0.25, total:1},
-      //   {name: 'Page F', allocationPercentage: 0.5, total:1}
-      // ]
     };
   }  
 
@@ -57,9 +49,8 @@ class AllocationGraph extends Component {
   }
 
 
-  _onMouseMove = (e) => {
 
-      console.log('woo')
+  _onMouseMove = (e) => {
     if(this.state.drawActive==true&&R.contains(e.activeLabel,R.pluck('date', this.props.allocation))){
       var changedIndex = R.findIndex(R.propEq('date', e.activeLabel))(this.props.allocation)
       // take 30 off chart height to allow for X axis.... #todo add height as prop
@@ -108,11 +99,11 @@ class AllocationGraph extends Component {
 }
 
 
-const mapStateToProps = ( {staffInfo,activeStaffId,staffAllocations} ) => {
+const mapStateToProps = ( {staffInfo,activeStaffId,tempAllocation} ) => {
   return {
     staffInfo,
     activeStaffId,
-    staffAllocations
+    tempAllocation
   }
 }
 
@@ -120,5 +111,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({setStaffAllocation}, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllocationGraph);
+export default connect(mapStateToProps, mapDispatchToProps)(SetAllocationGraph);
 

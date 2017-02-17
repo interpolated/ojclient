@@ -17,3 +17,4 @@ export function setActiveAllocations(state='', action){
      return state
   }
 }
+

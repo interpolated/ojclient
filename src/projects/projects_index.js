@@ -14,6 +14,7 @@ import R from 'ramda';
 // import selectors
 // import components
 import AllocationGraph  from './projects_allocation_graph';
+import ProjectForm  from './projects_new_project_form';
 
 
 // activeProject{
@@ -51,6 +52,7 @@ export default class Projects extends Component {
   render() {
     return (
       <div className="container-fluid">
+        <ProjectForm/>
         <AllocationGraph/>
       </div>
     );
