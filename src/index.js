@@ -12,6 +12,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './reducers_index';
 import thunk from 'redux-thunk'
 import {  Router, Route, IndexRoute, Link, browserHistory  } from 'react-router';
+import { enableBatching} from 'redux-batched-actions';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

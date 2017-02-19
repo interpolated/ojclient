@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
 import {toggleStaffUp} from './seats/seats_reducers';
-import {setActiveAllocations,setActiveSkills} from './staff/staff_reducers';
+import {setActiveStaffAllocations,setActiveSkills} from './staff/staff_reducers';
 import {updateStaffInfo, setActiveStaffId} from './common/common_reducers'
 import {setRedirectUrl, toggleLoggedIn, setUserToken} from './authentication/authentication_reducers'
 
-import {setActiveProjectId,updateActiveProjectInfo} from './projects/projects_reducers';
+import {setActiveProjectAllocations,updateActiveProjectInfo,updateTempAllocation,setActiveProjectAllocation} from './projects/projects_reducers';
 
 
 const rootReducer = combineReducers(
@@ -12,16 +12,23 @@ const rootReducer = combineReducers(
         // seats reducers
         staffUp:toggleStaffUp,
         
+        // allocations
+
+
         // active is currently selected
 
         activeStaffId:setActiveStaffId,
-        activeStaffAllocations:setActiveAllocations,
-        
+        activeStaffAllocations:setActiveStaffAllocations,
+        activeProjectAllocations:setActiveProjectAllocations,
+
+        tempAllocation:updateTempAllocation,
+        projectAllocation:setActiveProjectAllocation,
+
         // activeProject:setActiveProject,
         activeStaffSkills:setActiveSkills,
 
         // temp are entities created in client and yet to be sent to server
-        activeProjectId:setActiveProjectId,
+
         activeProjectInfo:updateActiveProjectInfo,
 
         // this is strange - should I update to temp?

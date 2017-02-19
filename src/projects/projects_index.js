@@ -11,63 +11,53 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import R from 'ramda';
 
 // import actions
+import {fetchStaffInfo} from '../common/common_actions'
 // import selectors
 // import components
-import AllocationGraph  from './projects_allocation_graph';
+import SetAllocationGraph  from './projects_allocation_graph';
 import ProjectForm  from './projects_new_project_form';
+import ProjectFetch  from './projects_async_fetch';
+import StaffTable  from '../staff/staff_staff_table';
+import {setActiveStaffId }  from '../staff/staff_actions';
 
 
-// activeProject{
-//   id,
-//   name,
-//   startDate,
-//   endDate,
-//   allocatedStaff,
-//   milestones,
-//   description,
-//   sector,
-//   budget
-// }
-
-// form component - name, description, sector, budget
-
-// date component - start, end
-// milestone form - add to date
-
-// allocation graph - this is done
-
-export default class Projects extends Component {
+class Projects extends Component {
   
   componentWillMount(){
-
+        this.props.fetchStaffInfo(this.props.userToken)
   }
-
-// Projectsdf
-//   - contains milestones strung together - end date of previous becomes date of 
-//   - draw to add allocation
-//   - 
-
-
 
   render() {
     return (
-      <div className="container-fluid">
-        <ProjectForm/>
-        <AllocationGraph/>
-      </div>
+      <Row>
+        <Col md="3">
+          <ProjectFetch/>
+          <StaffTable/>
+        </Col>
+        <Col md="9">
+          <Col md="8">
+            <SetAllocationGraph/>
+          </Col>
+          <Col md="4">
+            <ProjectForm/>
+          </Col>
+        </Col>
+      </Row>
     );
   }
 }
 
 
-// const mapStateToProps = ( {BITSOFSTATE} ) => {
-//   return {
-//     BITSOFSTATE
-//   }
-// }
+const mapStateToProps = ( {userToken,activeStaffId} ) => {
+  return {
+    userToken,
+    activeStaffId
+  }
+}
 
-// const mapDispatchToProps = (dispatch) => {
-//   return bindActionCreators({ACTIONCREATORS}, dispatch)
-// }
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({fetchStaffInfo,setActiveStaffId}, dispatch)
+}
 
-// export default connect(mapStateToProps, mapDispatchToProps)(COMPONENTNAME);
+export default connect(mapStateToProps, mapDispatchToProps)(Projects);
+

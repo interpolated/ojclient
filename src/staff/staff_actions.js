@@ -1,29 +1,30 @@
- import axios from 'axios';
+import {BASE_URL} from '../constants.js';
+import axios from 'axios';
 import {normalize, schema}  from 'normalizr';    
 
 export const FETCH_STAFFMEMBER_SKILLS = "FETCH_STAFFMEMBER_SKILLS"
 export const FETCH_STAFFMEMBER_PROJECTS = "FETCH_STAFFMEMBER_PROJECTS"
 export const SET_ACTIVE_SKILLS = "SET_ACTIVE_SKILLS"
-export const SET_ACTIVE_ALLOCATIONS = "SET_ACTIVE_ALLOCATIONS"
+export const SET_ACTIVE_STAFF_ALLOCATIONS = "SET_ACTIVE_STAFF_ALLOCATIONS"
 
 
 
 export function fetchStaffmemberAllocations(authToken,id){
   return dispatch=>{
-    axios.get(`http://localhost:8000/api/allocations/?staffid=${id}`,{
+    axios.get(`${BASE_URL}allocations/?staffid=${id}`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
       // this adds entity.staffMembers and will look for staffMembers:[list]
-      const allocation = new schema.Entity('allocations');
-      // this makes the whole schema -> in this case only one entity
-      const allocationSchema = { allocations: [ allocation ] }
-      // first argument of normalize is data, looking for key staffMembers (as per schema entity), sencond argument is the entire schema.
-      const normalizedData = normalize({allocations: response.data}, allocationSchema);
+      // const allocation = new schema.Entity('allocations');
+      // // this makes the whole schema -> in this case only one entity
+      // const allocationSchema = { allocations: [ allocation ] }
+      // // first argument of normalize is data, looking for key staffMembers (as per schema entity), sencond argument is the entire schema.
+      // const normalizedData = normalize({allocations: response.data}, allocationSchema);
       dispatch(
         {
-          type:SET_ACTIVE_ALLOCATIONS,
+          type:SET_ACTIVE_STAFF_ALLOCATIONS,
           // need to normalize data here using normalizr
-          payload:normalizedData.entities.allocations||{}
+          payload:response.data
         }
       )
     }).catch(error=>{
@@ -34,7 +35,7 @@ export function fetchStaffmemberAllocations(authToken,id){
 
 export function fetchStaffmemberSkills(authToken,id){
   return dispatch=>{
-    axios.get(`http://localhost:8000/api/skills/?staffid=${id}`,{
+    axios.get(`${BASE_URL}skills/?staffid=${id}`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
       // this adds entity.staffMembers and will look for staffMembers:[list]

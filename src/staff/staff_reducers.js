@@ -9,9 +9,9 @@ export function setActiveSkills(state='', action){
      return state
   }
 }
-export function setActiveAllocations(state='', action){
+export function setActiveStaffAllocations(state='', action){
   switch(action.type){
-    case types.SET_ACTIVE_ALLOCATIONS:
+    case types.SET_ACTIVE_STAFF_ALLOCATIONS:
       return action.payload 
     default:
      return state
