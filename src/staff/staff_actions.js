@@ -14,12 +14,7 @@ export function fetchStaffmemberAllocations(authToken,id){
     axios.get(`${BASE_URL}allocations/?staffid=${id}`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
-      // this adds entity.staffMembers and will look for staffMembers:[list]
-      // const allocation = new schema.Entity('allocations');
-      // // this makes the whole schema -> in this case only one entity
-      // const allocationSchema = { allocations: [ allocation ] }
-      // // first argument of normalize is data, looking for key staffMembers (as per schema entity), sencond argument is the entire schema.
-      // const normalizedData = normalize({allocations: response.data}, allocationSchema);
+
       dispatch(
         {
           type:SET_ACTIVE_STAFF_ALLOCATIONS,

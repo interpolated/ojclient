@@ -23,31 +23,33 @@ class StaffTable extends Component {
 
   // the above is equivalent to Object.values(props.staffInfo)
 
-  allocationStretcher = (allocation)=>{
 
-    this.props.updateTempAllocation(this.props.activeStaffId,this.props.activeProjectInfo.id,this.dataObj)
-    // console.log('ooooasdf')
-    // console.log(this.props.tempAllocation)
-  }
   
   onRowClick= (row)=>{
     // console.log('yah')
     this.props.setActiveStaffId(row.id)
     this.props.fetchStaffmemberAllocations(this.props.userToken,row.id)
     this.props.fetchStaffmemberSkills(this.props.userToken,row.id)
-    if(!!this.props.activeProjectInfo.id){
-      if(R.filter(R.propEq('staffmember',row.id),this.props.activeProjectAllocations).length>0){
+    // this.props.updateTempAllocation(payload,this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
+
+    if( !!this.props.activeProjectInfo.id&&
+        !!this.props.activeProjectAllocations
+      ){
+      if(R.filter(R.propEq('staffmember_id',row.id),this.props.activeProjectAllocations).length>0){
+        console.log('temp allocation is happening')
         this.props.updateTempAllocation({
-          staffmember:row.id,
+          staffmember_id:row.id,
           to_project:this.props.activeProjectInfo.id,
-          allocation: R.filter(R.propEq('staffmember',row.id),this.props.activeProjectAllocations)[0].allocation
-        })
+          allocation: R.filter(R.propEq('staffmember_id',row.id),this.props.activeProjectAllocations)[0].allocation
+        },this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
       }else{
+        console.log('temp allocation is not happening')
+        console.log(this.props.activeProjectAllocations)
          this.props.updateTempAllocation({
-          staffmember:row.id,
+          staffmember_id:row.id,
           to_project:this.props.activeProjectInfo.id,
           allocation: []
-          })
+          },this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
       }
     }
   }

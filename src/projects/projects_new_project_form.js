@@ -37,7 +37,6 @@ const ProjectForm = (props) => {
 
   
   const _onChange = (e) =>{
-    console.log(props)
     // console.log(state)
     props.updateActiveProjectInfo({[e.target.id]:e.target.value})
     // console.log(props.activeProjectInfo.name)
@@ -54,7 +53,6 @@ const ProjectForm = (props) => {
   }
 
   const _onClick = (e) => {
-    console.log('server time@=!!!')
     e.stopPropagation()
     createOrUpdate('project',props.activeProjectInfo,props.userToken)
   }

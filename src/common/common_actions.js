@@ -1,7 +1,8 @@
  import axios from 'axios';
 import {normalize, schema}  from 'normalizr';    
 import {BASE_URL} from '../constants.js'
-
+import {merge} from 'lodash'
+import R from 'ramda'
 export const UPDATE_STAFF_INFO = "UPDATE_STAFF_INFO"
 export const UPDATE_ALL_STAFF_INFO = "UPDATE_ALL_STAFF_INFO"
 export const SET_ACTIVE_STAFF_ID = "SET_ACTIVE_STAFF_ID"
@@ -59,6 +60,7 @@ export function setActiveStaffId(staffId){
   // post new to projects: http://localhost:8000/api/projects/
 
 export const createOrUpdate=(type,data,authToken)=>{
+
   var APItype = type+'s'
   if (type == 'project'){
     var filter = `projectId=${data.projectId}`
@@ -68,9 +70,12 @@ export const createOrUpdate=(type,data,authToken)=>{
   }  
   // if we are dealing with an allocation already created it will have an id, we modify the data in place
   // then this will work
+  var newData=data
   if (type == 'allocation'){
-    var filter = `id=${data.id}`
+    var filter = `staffmember=${data.staffmember_id}&to_project=${data.to_project}`
   }
+  console.log('calling API '+type)
+  console.log(newData)
   axios.get ( `${BASE_URL}${APItype}/?${filter}`,{
     headers:{Authorization: `Token ${authToken}`}
   }).then(response=>{
@@ -79,7 +84,7 @@ export const createOrUpdate=(type,data,authToken)=>{
           headers:{Authorization: `Token ${authToken}`}
         })
       }else{
-        axios.post(`${BASE_URL}${APItype}/`, data,{
+        axios.post(`${BASE_URL}${APItype}/`, newData,{
             headers:{Authorization: `Token ${authToken}`}
         })
       }

@@ -50,17 +50,20 @@ class ProjectFetch extends Component {
       // console.log(this.state.projectShortList)
       // console.log(R.filter(R.propEq('id',row.id),this.state.projectShortList)[0])
       var activeP = R.filter(R.propEq('id',row.id),this.state.projectShortList)[0]
+      console.log(activeP)
       this.props.updateActiveProjectInfo(activeP)
+      console.log('getting allocations')
       this.props.fetchActiveProjectAllocations(this.props.userToken,activeP.id)
       console.log('update?')
       if(!!this.props.activeStaffId&&!!activeP.id){
-        console.log('active staff id>>>  '+this.props.activeStaffId)
-        console.log(R.filter(R.propEq('staffmember',this.props.activeStaffId),this.props.activeProjectAllocations)[0].allocation)
+        // console.log('active staff id>>>  '+this.props.activeStaffId)
+        // console.log(R.filter(R.propEq('staffmember',this.props.activeStaffId),this.props.activeProjectAllocations)[0].allocation)
+        console.log(this.props.activeProjectInfo.startdate)
         this.props.updateTempAllocation({
-          staffmember:this.props.activeStaffId,
+          staffmember_id:this.props.activeStaffId,
           to_project:activeP.id,
-          allocation:R.filter(R.propEq('staffmember',this.props.activeStaffId),this.props.activeProjectAllocations)[0].allocation||[]
-        })
+          allocation:R.filter(R.propEq('staffmember_id',this.props.activeStaffId),this.props.activeProjectAllocations)[0].allocation||[]
+        },this.props.updateActiveProjectInfo.startdate,this.props.activeProjectInfo.enddate)
       }
   }
 
@@ -85,7 +88,7 @@ class ProjectFetch extends Component {
   render() {
     return (
 
-      <Col>
+      <Col> 
         <FormControl 
           id="projectId"
           autocomplete="off"
