@@ -5,12 +5,13 @@ import R from 'ramda'
 import moment from 'moment'    
 import {batchActions} from 'redux-batched-actions';
 
-export const UPDATE_ACTIVE_PROJECT_INFO   = "UPDATE_ACTIVE_PROJECT_INFO"
-export const SET_ACTIVE_PROJECT_ID = "SET_ACTIVE_PROJECT_ID"
-export const SET_ACTIVE_PROJECT_ALLOCATIONS = "SET_ACTIVE_PROJECT_ALLOCATIONS"
-export const UPDATE_TEMP_ALLOCATION = "UPDATE_TEMP_ALLOCATION"
-export const SET_PROJECT_ALLOCATION = "SET_PROJECT_ALLOCATION"
-export const UPDATE_PROJECT_ALLOCATION = "UPDATE_PROJECT_ALLOCATION"
+export const UPDATE_ACTIVE_PROJECT_INFO   = 'UPDATE_ACTIVE_PROJECT_INFO'
+export const SET_ACTIVE_PROJECT_ID = 'SET_ACTIVE_PROJECT_ID'
+export const SET_ACTIVE_PROJECT_ALLOCATIONS = 'SET_ACTIVE_PROJECT_ALLOCATIONS'
+export const UPDATE_TEMP_ALLOCATION = 'UPDATE_TEMP_ALLOCATION'
+export const SET_PROJECT_ALLOCATION = 'SET_PROJECT_ALLOCATION'
+export const UPDATE_PROJECT_ALLOCATION = 'UPDATE_PROJECT_ALLOCATION'
+export const SET_ACTIVE_PROJECT_MILESTONES = 'SET_ACTIVE_PROJECT_MILESTONES'
 
 //update a project
 export  function updateActiveProjectInfo(payload){
@@ -21,7 +22,6 @@ export  function updateActiveProjectInfo(payload){
           type: UPDATE_ACTIVE_PROJECT_INFO,
           payload
         })
-
     }
 }
 
@@ -30,14 +30,6 @@ export function updateTempAllocation(payload,startdate,enddate){
     type: UPDATE_TEMP_ALLOCATION,
     startdate,
     enddate,
-    payload
-
-  }
-}
-
-export function setProjectAllocation(payload){
-  return{
-    type: SET_PROJECT_ALLOCATION,
     payload
   }
 }
@@ -51,12 +43,11 @@ export function updateProjectAllocation(staffId,payload){
           staffId
         }
       )
-
   }
-
 }
 
 
+// ASYNCHRONOUS ACTIONS
 
 // get a project
 export function fetchProject(authToken,projectId){
@@ -94,6 +85,20 @@ export function fetchActiveProjectAllocations(authToken,id){
   }
 }
 
-const parse=(x)=>{
-  return JSON.parse(x)
+// get a projects milestones
+export function fetchActiveProjectMilestones(authToken,id){
+  return dispatch=>{
+    axios.get(`http://localhost:8000/api/milestones/?of_project=${id}`,{
+      headers:{Authorization: `Token ${authToken}`}
+    }).then(response=>{
+      dispatch(
+        {
+          type:SET_ACTIVE_PROJECT_MILESTONES,
+          payload:response.data
+        }
+      )
+    }).catch(error=>{
+      console.log(error)
+    })
+  }
 }

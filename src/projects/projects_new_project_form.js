@@ -44,12 +44,12 @@ const ProjectForm = (props) => {
 
   const handleChangeStart = (date)=>{
        var activeId=props.activeProjectId
-    props.updateActiveProjectInfo({startdate:moment(date).format('YYYY-MM-DD')},activeId)
+    props.updateActiveProjectInfo({startdate:moment(date).day(5).format('YYYY-MM-DD')},activeId)
   }
 
   const handleChangeEnd = (date)=>{
     var activeId=props.activeProjectId
-    props.updateActiveProjectInfo({enddate:moment(date).format('YYYY-MM-DD')},activeId)
+    props.updateActiveProjectInfo({enddate:moment(date).day(5).format('YYYY-MM-DD')},activeId)
   }
 
   const _onClick = (e) => {

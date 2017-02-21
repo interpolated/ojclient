@@ -23,10 +23,8 @@ class SummaryGraph extends Component {
 
 // function maps over allocation object and creates stacked chart - need to move to selectors
   allocationNamer=(x)=>{
-    console.log(x)
     if(!(typeof x.allocation=='undefined')){
         return x.allocation.map(e=>{
-          console.log(e)
           return {['allocation'+x.staffmember_id]:e.allocation,day:e.day}
         })
     }  
@@ -47,7 +45,7 @@ class SummaryGraph extends Component {
   Barcharter=(id)=>{
     if(!(id=='day'))
     {return(
-          <Area             
+          <Bar             
           isAnimationActive = {false}
           dataKey={`${id}`} 
           stackId='a' 
@@ -70,12 +68,7 @@ class SummaryGraph extends Component {
             barGap={'1em'}
             barCategoryGap={'1%'}
             margin={{top: 6, right: 30, left: 20, bottom: 5}}>
-          <CartesianGrid
-            strokeDasharray='1 5'
-            stroke='#A59E9E'
-            height={1}
-            vertical={false}/>
-          <XAxis dataKey='day' style={{ pointerEvents: 'none' }}/>
+
            {Object.keys(stacked[0]).map(this.Barcharter)}
           </ComposedChart>
         </div>

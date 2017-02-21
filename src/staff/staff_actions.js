@@ -6,12 +6,26 @@ export const FETCH_STAFFMEMBER_SKILLS = "FETCH_STAFFMEMBER_SKILLS"
 export const FETCH_STAFFMEMBER_PROJECTS = "FETCH_STAFFMEMBER_PROJECTS"
 export const SET_ACTIVE_SKILLS = "SET_ACTIVE_SKILLS"
 export const SET_ACTIVE_STAFF_ALLOCATIONS = "SET_ACTIVE_STAFF_ALLOCATIONS"
+export const UPDATE_STAFF_ALLOCATION = "UPDATE_STAFF_ALLOCATION"
+
+
+export function updateStaffAllocation(projectId,payload){
+  return function(dispatch){
+    dispatch(
+        {
+          type: UPDATE_STAFF_ALLOCATION,
+          payload,
+          projectId
+        }
+      )
+  }
+}
 
 
 
 export function fetchStaffmemberAllocations(authToken,id){
   return dispatch=>{
-    axios.get(`${BASE_URL}allocations/?staffid=${id}`,{
+    axios.get(`${BASE_URL}allocations/?staffmember_id=${id}`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
 
@@ -30,7 +44,7 @@ export function fetchStaffmemberAllocations(authToken,id){
 
 export function fetchStaffmemberSkills(authToken,id){
   return dispatch=>{
-    axios.get(`${BASE_URL}skills/?staffid=${id}`,{
+    axios.get(`${BASE_URL}skills/?staffmember_id=${id}`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
       // this adds entity.staffMembers and will look for staffMembers:[list]

@@ -34,7 +34,6 @@ class ProjectFetch extends Component {
       .then((response) => {
       return response.json();
       }).then((json) => {
-      console.log(json)
       this.setState({projectShortList:json})
       // return { options:R.pluck('projectId',json).map((item)=>({'value':item, 'label':item})) };
     });
@@ -50,20 +49,15 @@ class ProjectFetch extends Component {
       // console.log(this.state.projectShortList)
       // console.log(R.filter(R.propEq('id',row.id),this.state.projectShortList)[0])
       var activeP = R.filter(R.propEq('id',row.id),this.state.projectShortList)[0]
-      console.log(activeP)
       this.props.updateActiveProjectInfo(activeP)
-      console.log('getting allocations')
       this.props.fetchActiveProjectAllocations(this.props.userToken,activeP.id)
-      console.log('update?')
       if(!!this.props.activeStaffId&&!!activeP.id){
-        // console.log('active staff id>>>  '+this.props.activeStaffId)
-        // console.log(R.filter(R.propEq('staffmember',this.props.activeStaffId),this.props.activeProjectAllocations)[0].allocation)
-        console.log(this.props.activeProjectInfo.startdate)
+        console.log('THIS SHOULD SET TEMP ALLOCATION')
         this.props.updateTempAllocation({
           staffmember_id:this.props.activeStaffId,
           to_project:activeP.id,
           allocation:R.filter(R.propEq('staffmember_id',this.props.activeStaffId),this.props.activeProjectAllocations)[0].allocation||[]
-        },this.props.updateActiveProjectInfo.startdate,this.props.activeProjectInfo.enddate)
+        },activeP.startdate,activeP.enddate)
       }
   }
 
@@ -74,7 +68,6 @@ class ProjectFetch extends Component {
 
   _onChange = (e)=>{
       // console.log(this.state.projectShortList[0])
-      console.log(e.target.value)
       this.getOptions(e.target.value)
       this.setState({value:e.target.value})
     }

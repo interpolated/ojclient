@@ -16,6 +16,7 @@ import {fetchStaffInfo} from '../common/common_actions'
 // import components
 import SetAllocationGraph  from './projects_allocation_graph';
 import SummaryGraph  from './projects_summary_graph';
+import ExistingAllocationGraph  from './projects_existing_staff_allocation';
 import ProjectForm  from './projects_new_project_form';
 import ProjectFetch  from './projects_async_fetch';
 import StaffTable  from '../staff/staff_staff_table';
@@ -39,6 +40,7 @@ class Projects extends Component {
           <Col md="8">
             <SummaryGraph />
             <SetAllocationGraph/>
+            <ExistingAllocationGraph/>
           </Col>
           <Col md="4">
             <ProjectForm/>

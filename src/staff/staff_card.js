@@ -21,8 +21,7 @@ const ProjectCard = (props)=>{
   return (
    <Col md="3">
       <Panel>
-        <h4>{props.to_milestone}</h4>
-        <h6>{props.allocation}</h6>
+        <h4>{props}</h4>
       </Panel>
     </Col>
     )
@@ -43,8 +42,14 @@ const SkillCard = (props)=>{
 
 const StaffDetail = (props) => {
 
-  const allocationList = Object.values(props.activeStaffAllocations)
+  var allocationList =[]
+  if(!!props.activeStaffId){
+    allocationList = Object.values(props.staffInfo[props.activeStaffId].projects)
+    
+  }
+
   const skillList = Object.values(props.activeStaffSkills)
+  console.log(props.activeStaffAllocations)
   console.log(props.activeStaffId)
   
   if(props.activeStaffId){

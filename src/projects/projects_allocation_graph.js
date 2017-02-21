@@ -13,7 +13,8 @@ import R from 'ramda';
 import {BarChart, ComposedChart,Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 // import actions
-import {updateTempAllocation,setProjectAllocation,updateProjectAllocation}  from './projects_actions';
+import {updateTempAllocation,updateProjectAllocation}  from './projects_actions';
+import {updateStaffAllocation}  from '../staff/staff_actions';
 import {createOrUpdate}  from '../common/common_actions';
 
 import Moment from 'moment';
@@ -50,7 +51,7 @@ class SetAllocationGraph extends Component {
 
   }
 
-
+  height=200
 
   _onMouseMove = (e) => {
     // check if mousedown with drawActive, find the active day based on the 'activeLabel'
@@ -58,7 +59,7 @@ class SetAllocationGraph extends Component {
       // find the index
       var changedIndex = R.findIndex(R.propEq('day', e.activeLabel))(this.props.tempAllocation.allocation)
       if(changedIndex>=0){
-        var storeage=R.update(changedIndex,{projAllocation:1,day:e.activeLabel,allocation:this.closest((270-e.chartY)/270)},this.props.tempAllocation.allocation)
+        var storeage=R.update(changedIndex,{projAllocation:1,day:e.activeLabel,allocation:this.closest(((this.height-30)-e.chartY)/(this.height-30))},this.props.tempAllocation.allocation)
       }else{
       }
       // updateTempAllocation uses R.findIndex to update state
@@ -71,6 +72,7 @@ class SetAllocationGraph extends Component {
   _onMouseUp = (e) => {
     this.setState({drawActive:false})
     this.props.updateProjectAllocation(this.props.activeStaffId,this.props.tempAllocation)
+    this.props.updateStaffAllocation(this.props.activeProjectInfo.id,this.props.tempAllocation)
     createOrUpdate('allocation',this.props.tempAllocation,this.props.userToken)
   }
 
@@ -79,20 +81,19 @@ class SetAllocationGraph extends Component {
     // console.log(this.props.tempAllocation)  
     return(
       <Row>
-      <Col md="8" onMouseDown={this._onMouseDown.bind(this)} onMouseUp={this._onMouseUp.bind(this)}>
-        <div>
+      <div onMouseDown={this._onMouseDown.bind(this)} onMouseUp={this._onMouseUp.bind(this)}>
           <ComposedChart 
             onMouseMove={this._onMouseMove.bind(this)}
             onMouseLeave={this._onMouseLeave.bind(this)}
             width={800} 
-            height={300} 
+            height={this.height} 
             data={this.props.tempAllocation.allocation}
             barGap={'1em'}
             barCategoryGap={'1%'}
             margin={{top: 6, right: 30, left: 20, bottom: 5}}>
           <CartesianGrid
             strokeDasharray="1 5"
-            stroke='#A59E9E'
+            stroke='#B4B1B1'
             height={0.2}
             vertical={false}/>
           <XAxis dataKey="day" style={{ pointerEvents: 'none' }}/>
@@ -101,10 +102,9 @@ class SetAllocationGraph extends Component {
             isAnimationActive = {false}
             dataKey="allocation" 
             stackId='a' 
-            fill="#C5C3F5" />
+            fill="#C40202" />
           </ComposedChart>
-        </div>
-      </Col>
+      </div>
       </Row>
     )
   }
@@ -126,7 +126,7 @@ const mapStateToProps = ( {userToken,staffInfo,projectAllocation,activeStaffId,t
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({updateTempAllocation, createOrUpdate, setProjectAllocation,updateProjectAllocation}, dispatch)
+  return bindActionCreators({updateTempAllocation, createOrUpdate ,updateProjectAllocation,updateStaffAllocation}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SetAllocationGraph);

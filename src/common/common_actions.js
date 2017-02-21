@@ -72,10 +72,9 @@ export const createOrUpdate=(type,data,authToken)=>{
   // then this will work
   var newData=data
   if (type == 'allocation'){
-    var filter = `staffmember=${data.staffmember_id}&to_project=${data.to_project}`
+    var filter = `staffmember_id=${data.staffmember_id}&to_project=${data.to_project}`
   }
   console.log('calling API '+type)
-  console.log(newData)
   axios.get ( `${BASE_URL}${APItype}/?${filter}`,{
     headers:{Authorization: `Token ${authToken}`}
   }).then(response=>{
