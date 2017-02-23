@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux';
 
 // import 3rd party react components
-import {Row,Col,ButtonGroup, Button,Container} from 'react-bootstrap'
+import {Panel,Row,Col,ButtonGroup, Button,Container} from 'react-bootstrap'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 // import 3rd party libraries
@@ -37,14 +37,25 @@ class Projects extends Component {
           <StaffTable/>
         </Col>
         <Col md="9">
+          <Panel>
           <Col md="8">
+            <h4>Weekly allocation for {this.props.activeProjectInfo.name}</h4>
             <SummaryGraph />
+            <br/>
+            {this.props.activeStaffId&&
+              <h4>{`${this.props.staffInfo[this.props.activeStaffId].name}'s proposed allocation to ${this.props.activeProjectInfo.name}`}</h4>
+            }
             <SetAllocationGraph/>
+            <br/>
+            {this.props.activeStaffId&&
+              <h4>{`${this.props.staffInfo[this.props.activeStaffId].name}'s other commitments`}</h4>
+            }
             <ExistingAllocationGraph/>
-          </Col>
-          <Col md="4">
-            <ProjectForm/>
-          </Col>
+            </Col>
+            <Col md="4">
+              <ProjectForm/>
+            </Col>
+          </Panel>
         </Col>
       </Row>
     );
@@ -52,10 +63,12 @@ class Projects extends Component {
 }
 
 
-const mapStateToProps = ( {userToken,activeStaffId} ) => {
+const mapStateToProps = ( {userToken,activeStaffId,activeProjectInfo,staffInfo} ) => {
   return {
     userToken,
-    activeStaffId
+    activeStaffId,
+    staffInfo,
+    activeProjectInfo
   }
 }
 

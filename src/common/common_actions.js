@@ -3,6 +3,9 @@ import {normalize, schema}  from 'normalizr';
 import {BASE_URL} from '../constants.js'
 import {merge} from 'lodash'
 import R from 'ramda'
+import {transformBadAllocation} from './common_utils'
+
+
 export const UPDATE_STAFF_INFO = "UPDATE_STAFF_INFO"
 export const UPDATE_ALL_STAFF_INFO = "UPDATE_ALL_STAFF_INFO"
 export const SET_ACTIVE_STAFF_ID = "SET_ACTIVE_STAFF_ID"
@@ -19,7 +22,7 @@ export function updateStaffInfo(payload,staffId){
 
 export function fetchStaffInfo(authToken){
   return dispatch=>{
-    axios.get('http://localhost:8000/api/staffmembers/',{
+    axios.get(`${BASE_URL}staffmembers/`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
       // console.log(response)
@@ -90,3 +93,63 @@ export const createOrUpdate=(type,data,authToken)=>{
   })
 }
 
+export const deleteFromServer=(type,data,authToken)=>{
+
+  var APItype = type+'s'
+  if (type == 'project'){
+    var item = `${data.id}`
+  }
+  if (type == 'staffMember'){
+    var item = `${data.id}/`
+  }  
+  // if we are dealing with an allocation already created it will have an id, we modify the data in place
+  // then this will work
+  var newData=data
+  if (type == 'allocation'){
+    var item = `${data.id}`
+  }
+  console.log('calling API '+type)
+  axios.delete( `${BASE_URL}${APItype}/${item}/`,{
+    headers:{Authorization: `Token ${authToken}`}
+  }).then(response=>{
+        console.log(response)
+      })
+  }
+
+export const setActiveStaffIdAppRender = (id)=>{
+  // need to import reducers setactiveStaffId
+  // need to to import fetchStaffMemberAllocation
+  // need to to import fetchStaffMemberSkills
+  // need to to import updateTempAllocation
+  // need to import transformBadAllocation
+
+    // console.log('yah')
+    this.props.setActiveStaffId(id)
+    this.props.fetchStaffmemberAllocations(this.props.userToken,id)
+    this.props.fetchStaffmemberSkills(this.props.userToken,id)
+    // this.props.updateTempAllocation(payload,this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
+
+    if( !!this.props.activeProjectInfo.id&&
+        !!this.props.activeProjectAllocations
+      ){
+      if(R.filter(R.propEq('staffmember_id',id),this.props.activeProjectAllocations).length>0){
+        // console.log('temp allocation is happening')
+        this.props.updateTempAllocation(
+          transformBadAllocation(R.filter(R.propEq('staffmember_id',id),this.props.activeProjectAllocations)[0],
+          this.props.activeProjectInfo.startdate,
+          this.props.activeProjectInfo.enddate)
+        )
+      }else{
+        // console.log('temp allocation is not happening')
+         this.props.updateTempAllocation(
+          transformBadAllocation({
+            staffmember_id:id,
+            to_project:this.props.activeProjectInfo.id,
+            allocation: []
+         },
+          this.props.activeProjectInfo.startdate,
+          this.props.activeProjectInfo.enddate
+      )
+    )
+  }
+}}

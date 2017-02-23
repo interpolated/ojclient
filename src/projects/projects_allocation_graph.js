@@ -5,12 +5,12 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
 // import 3rd party react components
-import {Row,Col,ButtonGroup, Button,Container} from 'react-bootstrap'
+import {Panel,Row,Col,ButtonGroup, Button,Container} from 'react-bootstrap'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 // import 3rd party libraries
 import R from 'ramda';
-import {BarChart, ComposedChart,Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {ResponsiveContainer,BarChart, ComposedChart,Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 // import actions
 import {updateTempAllocation,updateProjectAllocation}  from './projects_actions';
@@ -51,6 +51,7 @@ class SetAllocationGraph extends Component {
 
   }
 
+
   height=200
 
   _onMouseMove = (e) => {
@@ -63,7 +64,9 @@ class SetAllocationGraph extends Component {
       }else{
       }
       // updateTempAllocation uses R.findIndex to update state
-      this.props.updateTempAllocation({allocation:storeage},this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
+      this.props.updateTempAllocation({staffmember_id:this.props.activeStaffId,to_project:this.props.activeProjectInfo.id, allocation:storeage},
+        this.props.activeProjectInfo.startdate,
+        this.props.activeProjectInfo.enddate)
     }
   this.forceUpdate()
 
@@ -76,16 +79,21 @@ class SetAllocationGraph extends Component {
     createOrUpdate('allocation',this.props.tempAllocation,this.props.userToken)
   }
 
+  allocatedStaff = (x)=>{
+
+  }
+
   render (){
 
-    // console.log(this.props.tempAllocation)  
     return(
       <Row>
+
       <div onMouseDown={this._onMouseDown.bind(this)} onMouseUp={this._onMouseUp.bind(this)}>
+         <ResponsiveContainer height={this.height}>
+          
           <ComposedChart 
             onMouseMove={this._onMouseMove.bind(this)}
             onMouseLeave={this._onMouseLeave.bind(this)}
-            width={800} 
             height={this.height} 
             data={this.props.tempAllocation.allocation}
             barGap={'1em'}
@@ -96,14 +104,17 @@ class SetAllocationGraph extends Component {
             stroke='#B4B1B1'
             height={0.2}
             vertical={false}/>
-          <XAxis dataKey="day" style={{ pointerEvents: 'none' }}/>
+          <XAxis dataKey="day" style={{ pointerEvents: 'none' }} width={10}/>
+          <YAxis  tickLine={false}  axisLine={false}  width={10} label="Days"/>
+
           <Area type='monotone' dataKey='projAllocation' fill='none' stroke='none'/>
           <Bar             
             isAnimationActive = {false}
             dataKey="allocation" 
             stackId='a' 
-            fill="#C40202" />
+            fill='#E40000' />
           </ComposedChart>
+          </ResponsiveContainer>
       </div>
       </Row>
     )

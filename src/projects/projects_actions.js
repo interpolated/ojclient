@@ -5,6 +5,7 @@ import R from 'ramda'
 import moment from 'moment'    
 import {batchActions} from 'redux-batched-actions';
 
+
 export const UPDATE_ACTIVE_PROJECT_INFO   = 'UPDATE_ACTIVE_PROJECT_INFO'
 export const SET_ACTIVE_PROJECT_ID = 'SET_ACTIVE_PROJECT_ID'
 export const SET_ACTIVE_PROJECT_ALLOCATIONS = 'SET_ACTIVE_PROJECT_ALLOCATIONS'
@@ -28,8 +29,7 @@ export  function updateActiveProjectInfo(payload){
 export function updateTempAllocation(payload,startdate,enddate){
   return{
     type: UPDATE_TEMP_ALLOCATION,
-    startdate,
-    enddate,
+
     payload
   }
 }
@@ -70,7 +70,7 @@ export function fetchProject(authToken,projectId){
 // get a projects allocations
 export function fetchActiveProjectAllocations(authToken,id){
   return dispatch=>{
-    axios.get(`http://localhost:8000/api/allocations/?to_project=${id}`,{
+    axios.get(`${BASE_URL}allocations/?to_project=${id}`,{
       headers:{Authorization: `Token ${authToken}`}
     }).then(response=>{
       dispatch(

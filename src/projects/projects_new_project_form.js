@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 
 // import 3rd party react components
 import {Row,Col,ButtonGroup, Button,Container, FormGroup, ControlLabel,FormControl,HelpBlock} from 'react-bootstrap'
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import {ButtonToolbar,BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 // import 3rd party libraries
 import R from 'ramda';
@@ -15,7 +15,7 @@ import DatePicker from 'react-bootstrap-date-picker'
 
 // import actions
 import {setActiveProjectId,updateActiveProjectInfo}  from './projects_actions';
-import {createOrUpdate}  from '../common/common_actions';
+import {createOrUpdate,deleteFromServer}  from '../common/common_actions';
 // import constants
 
 
@@ -25,7 +25,7 @@ import {createOrUpdate}  from '../common/common_actions';
 const FieldGroup = ({ id, label, help, ...props })=> {
     return (
       <FormGroup controlId={id}>
-        <ControlLabel>{label}</ControlLabel>
+        <ControlLabel >{label}</ControlLabel >
         <FormControl {...props} />
         {help && <HelpBlock>{help}</HelpBlock>}
       </FormGroup>
@@ -56,53 +56,78 @@ const ProjectForm = (props) => {
     e.stopPropagation()
     createOrUpdate('project',props.activeProjectInfo,props.userToken)
   }
+  const _onClickDelete = (e) => {
+    e.stopPropagation()
+    deleteFromServer('project',props.activeProjectInfo,props.userToken)
+  }
 
   // onChange={_onChange}
   
   return (
             
       <div onChange={_onChange} >
-
+          <h4>Project Details</h4>
         <form>
-         
-       
-         <FieldGroup
-            id="projectId"
-            type="text"
-            label="projectId"
-            // onChange={_onChange}
-            value={props.activeProjectInfo.projectId}
-            placeholder="Project ID"/>          
-         <FieldGroup
-            id="name"
-            type="text"
-            label="Project Name"
-            // onChange={_onChange}
-            value={props.activeProjectInfo.name}
-            placeholder="Name Project"/>    
-          <FieldGroup
-            id="description"
-            type="textarea"
-            label="Project Description"
-            value={props.activeProjectInfo.description}
-            // onChange={_onChange}
-            placeholder="Describe Project"/>
+          <Row>
+            <Col md="6">
+             <FieldGroup
+                id="projectId"
+                type="text"
+                label="projectId"
+                // onChange={_onChange}
+                value={props.activeProjectInfo.projectId}
+                placeholder="Project ID"/>          
+            </Col>
+            <Col md="6">
+             <FieldGroup
+                id="name"
+                type="text"
+                label="Project Name"
+                // onChange={_onChange}
+                value={props.activeProjectInfo.name}
+                placeholder="Name Project"/> 
+              </Col>   
+          </Row>  
+          <Row>
+            <Col md="12">
+              <FieldGroup
+                id="description"
+                type="textarea"
+                label="Project Description"
+                value={props.activeProjectInfo.description}
+                // onChange={_onChange}
+                placeholder="Describe Project"/>
+            </Col>
+            
+          </Row>             
           <Row>
             
-          <Col md="6" >
-          <ControlLabel>Start Date</ControlLabel>
-          <DatePicker id="startdate"  value={props.activeProjectInfo.startdate} onChange={handleChangeStart} />
-          </Col>
-          <Col md="6">
-          <ControlLabel>End Date</ControlLabel>
-          <DatePicker id="enddate" value={props.activeProjectInfo.enddate} onChange={handleChangeEnd} />
-          </Col>
+            <Col md="6" >
+            <ControlLabel >Start Date</ControlLabel  >
+            <DatePicker id="startdate" calendarPlacement="left"  value={props.activeProjectInfo.startdate} onChange={handleChangeStart} />
+            </Col>
+            <Col md="6">
+            <ControlLabel >End Date</ControlLabel  >
+            <DatePicker id="enddate" calendarPlacement="left" value={props.activeProjectInfo.enddate} onChange={handleChangeEnd} />
+            </Col>
           </Row>
-          <br/>
-          <Button onClick={_onClick}>
-            Load Project
-          </Button>
         </form>
+          <br/>
+          <Row>
+            <Col md="6">
+            <Button bsStyle="primary" block onClick={_onClick}>
+              Load Project
+            </Button>
+
+            </Col>
+            <Col md="6">
+            <Button bsStyle="danger" block onClick={_onClickDelete}>
+              Delete Project
+            </Button>
+
+            </Col>
+
+          </Row>
     </div>
   )
 } 

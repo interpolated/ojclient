@@ -1,6 +1,7 @@
 import {fetchStaffInfo} from '../common/common_actions'
 import {browserHistory} from 'react-router';
 import axios from 'axios'
+import {BASE_URL} from '../constants';
 
 export const SET_REDIRECT_URL = 'SET_REDIRECT_URL';
 export const TOGGLE_LOGGED_IN = 'TOGGLE_LOGGED_IN';
@@ -28,7 +29,7 @@ export function setUserToken(payload){
 
 export function logIn(username,password){
   return dispatch=>{
-    axios.post('http://localhost:8000/api/obtain_auth_token/',{
+    axios.post(`${BASE_URL}obtain_auth_token/`,{
       username:username,
       password:password
     }).then(response=>{

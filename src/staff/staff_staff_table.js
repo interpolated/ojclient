@@ -9,6 +9,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {Row,Col,ButtonGroup, Button,Container} from 'react-bootstrap'
 import {fetchStaffmemberSkills,fetchStaffmemberAllocations} from './staff_actions'
 import {fetchStaffInfo} from '../common/common_actions'
+import {transformBadAllocation} from '../common/common_utils'
 import {updateTempAllocation} from '../projects/projects_actions'
 import moment from 'moment'
 
@@ -36,23 +37,26 @@ class StaffTable extends Component {
         !!this.props.activeProjectAllocations
       ){
       if(R.filter(R.propEq('staffmember_id',row.id),this.props.activeProjectAllocations).length>0){
-        console.log('temp allocation is happening')
-        this.props.updateTempAllocation({
-          staffmember_id:row.id,
-          to_project:this.props.activeProjectInfo.id,
-          allocation: R.filter(R.propEq('staffmember_id',row.id),this.props.activeProjectAllocations)[0].allocation
-        },this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
+        // console.log('temp allocation is happening')
+        this.props.updateTempAllocation(
+          transformBadAllocation(R.filter(R.propEq('staffmember_id',row.id),this.props.activeProjectAllocations)[0],
+          this.props.activeProjectInfo.startdate,
+          this.props.activeProjectInfo.enddate)
+        )
       }else{
-        console.log('temp allocation is not happening')
-        console.log(this.props.activeProjectAllocations)
-         this.props.updateTempAllocation({
-          staffmember_id:row.id,
-          to_project:this.props.activeProjectInfo.id,
-          allocation: []
-          },this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
-      }
-    }
+        // console.log('temp allocation is not happening')
+         this.props.updateTempAllocation(
+          transformBadAllocation({
+            staffmember_id:row.id,
+            to_project:this.props.activeProjectInfo.id,
+            allocation: []
+         },
+          this.props.activeProjectInfo.startdate,
+          this.props.activeProjectInfo.enddate
+      )
+    )
   }
+}}
 
 
   options = {

@@ -2,7 +2,7 @@ import * as types from './common_actions'
 import {staffInfo} from '../assets/staff_list'
 import {merge} from 'lodash'
 
-export function updateStaffInfo(state = staffInfo, action){
+export function updateStaffInfo(state = {name:'',title:'',deskId:''}, action){
   switch(action.type){
   case types.UPDATE_STAFF_INFO:
         return merge(state,{[action.staffId]: action.payload})

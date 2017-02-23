@@ -9,7 +9,7 @@ import {transformBadAllocation} from '../common/common_utils'
 export function updateActiveProjectInfo(state = {}, action){
   switch(action.type){
   case types.UPDATE_ACTIVE_PROJECT_INFO:
-          // return merge(state,action.payload)
+          // return merge(state,newPayload)
           return assign({}, merge(state,action.payload));
   default:
     return state
@@ -38,15 +38,15 @@ export function updateTempAllocation(state = {}, action){
   // console.trace('reducer trace')
   switch(action.type){
   case types.UPDATE_TEMP_ALLOCATION:
-          const newState1=cloneDeep(state)
-          const newState2=merge(newState1,action.payload)
-          newState1.allocation=transformBadAllocation(action.payload.allocation,action.startdate,action.enddate)
-          // console.log(newPayload)
-          return newState1
+          return action.payload
   default:
     return state
   }
 }
+
+const toYYYYMMDD=(date)=>{
+    return moment(date).format('YYYYMMDD')
+  }
 
 
 

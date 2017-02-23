@@ -1,26 +1,11 @@
 import R from 'ramda';
 import moment from 'moment'
+import {cloneDeep} from 'lodash'
 
+export const transformBadAllocation = (allocationObj,projectStartdate,projectEnddate) => {
 
-export const transformBadAllocation = (allocationArray,projectStartdate,projectEnddate) => {
-
-  // console.log('===============================================================')
-  // console.log('this is pre-transformation')
-  // console.log(allocationArray)
-  // console.log('PROJECTSTART '+projectStartdate+ '   ----    PROJECTEND '+projectEnddate)
-  // console.log('allocationStart '+allocationArray[0].day+ '   ----    allocation end '+allocationArray[allocationArray.length-1].day)
-
-// function needs to do the following:
-// 1. check if allocationArray is 'well formed'
-// 2. make sure allocationArray is not longer than project timeline - to projectAllocationShort
-// 3. if allocationArray is shorter than projectAllocation then pad allocation out.
-// 
-// Can I use this to truncate staffAllocations to display on StaffGraph - I think so.
-// 
+    var allocationArray=cloneDeep(allocationObj.allocation)
     const projectAllocation=toRange(projectStartdate,projectEnddate)||[1,2]
-    // console.log(projectAllocation)
-    // console.log('this is projectAllocation -----')
-    // console.log(projectAllocation)
     if(!(typeof( allocationArray )== 'array'||
         typeof(allocationArray)=='object'&&
         typeof allocationArray[0] !== 'undefined'&&
@@ -28,36 +13,19 @@ export const transformBadAllocation = (allocationArray,projectStartdate,projectE
               allocationArray=projectAllocation
         }
 
-
-
-    // say tempAllocation is too long
-    // find index of temp allocation that matches first item of project Allocation
-    var lowAllocationArray = R.findIndex(R.propEq('day',projectAllocation[0].day),allocationArray)
-    var highAllocationArray = R.findLast(R.propEq('day',projectAllocation[projectAllocation.length-1].day),allocationArray)
-
-    var trimmedTempAllocation = allocationArray.slice(Math.max(lowAllocationArray,0),projectAllocation.length)
-    // console.log(R.pluck('days',trimmedTempAllocation))
-    // if allocation is too short
-
-    // construct array from start of projectAllocation to start of allocatoin array
-    var bottomEndIndex = R.findIndex(R.propEq('day', trimmedTempAllocation[0].day), projectAllocation)
-    var topStartIndex = R.findIndex(R.propEq('day', trimmedTempAllocation[trimmedTempAllocation.length-1].day), projectAllocation)
-
+    // console.log(projectAllocation)
     // create set of all keys
     const projectDates=(R.pluck('day',projectAllocation))
-    const allocationDates = (R.pluck('day', allocationArray))
-
+    var allocationDates = (R.pluck('day', allocationArray))
+    allocationDates = allocationDates.map((m)=>{
+        // console.log(m)
+        // console.log(moment(m))
+        return(parseInt(moment(m).format('YYYYMMDD')))
+    })
     const dateSet= new Set([...projectDates,...allocationDates])
-
-    // console.log('PROJECT data')
-    // console.log(projectAllocation)
-    // console.log('allocation data')
-    // console.log(allocationArray)
-
     const allDates = [...dateSet].sort()
-
     var pairs = allDates.map((e)=>{
-      
+        
         const projBit = R.filter(R.propEq('day',e),projectAllocation)[0]
         if((typeof projBit=='undefined')){
             return null
@@ -70,15 +38,10 @@ export const transformBadAllocation = (allocationArray,projectStartdate,projectE
             }
         }        
     })
-
-    // console.log('PAIRS')
-    // console.log(pairs)
-    // pairs = pairs.map((e)=>{if(e.length>1){return e[0]}})
     var cleanPairs = pairs.filter((x=>{return ((x!==null)&&(typeof x!=='undefined'))}))
-
-
-    return(cleanPairs)
-
+    const allocation = cloneDeep(allocationObj)
+    const test = (R.merge(allocation,{allocation:cleanPairs}))
+    return test
 }
 
 
@@ -96,3 +59,6 @@ const toRange=(projectStartdate,projectEnddate)=>{
     return(Object.values(R.mapObjIndexed((val,key,obj)=>({day:parseInt(key),projAllocation:1,allocation:0}),tA)))
 }
 
+
+
+// [`${allocation}_${id}`]
