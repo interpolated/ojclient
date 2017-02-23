@@ -14,25 +14,55 @@ import 'rc-slider/assets/index.css';
 
 // import 3rd party libraries
 import R from 'ramda';
-
+import moment from 'moment'
 // import actions
+import {
+  updateProjectMilestone,
+} from './projects_actions'
+
 
 // import selectors
 
 
+// add milestone
+
+// update milestone
+
+// delete milestone
+
+// each function is a function of the milestone object array
+
 
 const ProjectTimeline = (props) => {
 
+  const start = moment(props.activeProjectInfo.startdate).format('YYYYMMDD')
+  const end = moment(props.activeProjectInfo.enddate).format('YYYYMMDD')
+  const milestoneArray = props.activeProjectMilestones
 
+  const milestoneDateCleaner = (x)=>{
+    x.duedate= parseInt(moment(x.duedate).format('YYYYMMDD'))
+    return x
+  }
+
+  const cleanMilestoneArray=milestoneArray.map(milestoneDateCleaner)
+
+  console.log(cleanMilestoneArray)
+  console.log(start)
+  console.log(end)
+  console.log(R.pluck('duedate',cleanMilestoneArray))
+
+  const _onAfterChange = (e)=>{
+    console.log(e)
+  }
 
   return (
-      <div>
-        <Slider />
-        <Range />
-      </div>
+      <Row>
+        <Range 
+        min={start}
+        max={end}
+        value={R.pluck('duedate',cleanMilestoneArray)} />
+      </Row>
     )
-
-
 }
 
 
@@ -42,11 +72,11 @@ const mapStateToProps = ( {activeStaffId,activeProjectInfo,userToken,activeProje
     activeProjectInfo,
     activeProjectMilestones,
     userToken
-  }w
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ACTIONCREATORS}, dispatch)
+  return bindActionCreators({updateProjectMilestone}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectTimeline);

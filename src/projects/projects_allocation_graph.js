@@ -47,7 +47,7 @@ class SetAllocationGraph extends Component {
 
   _onMouseLeave = (e) => {
     this.setState({drawActive:false})
-    this.props.updateProjectAllocation(this.props.activeStaffId,this.props.tempAllocation)
+    // this.props.updateProjectAllocation(this.props.activeStaffId,this.props.tempAllocation)
 
   }
 
@@ -64,7 +64,10 @@ class SetAllocationGraph extends Component {
       }else{
       }
       // updateTempAllocation uses R.findIndex to update state
-      this.props.updateTempAllocation({staffmember_id:this.props.activeStaffId,to_project:this.props.activeProjectInfo.id, allocation:storeage},
+      this.props.updateTempAllocation(
+          {staffmember_id:this.props.activeStaffId,
+            to_project:this.props.activeProjectInfo.id, 
+            allocation:storeage},
         this.props.activeProjectInfo.startdate,
         this.props.activeProjectInfo.enddate)
     }

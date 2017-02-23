@@ -4,7 +4,7 @@ import {setActiveStaffAllocations,setActiveSkills} from './staff/staff_reducers'
 import {updateStaffInfo, setActiveStaffId} from './common/common_reducers'
 import {setRedirectUrl, toggleLoggedIn, setUserToken} from './authentication/authentication_reducers'
 
-import {setActiveProjectAllocations,updateActiveProjectInfo,updateTempAllocation} from './projects/projects_reducers';
+import {setActiveProjectAllocations,setActiveProjectMilestones,updateActiveProjectInfo,updateTempAllocation} from './projects/projects_reducers';
 
 
 const rootReducer = combineReducers(
@@ -20,6 +20,7 @@ const rootReducer = combineReducers(
         activeStaffId:setActiveStaffId,
         activeStaffAllocations:setActiveStaffAllocations,
         activeProjectAllocations:setActiveProjectAllocations,
+        activeProjectMilestones:setActiveProjectMilestones,
 
         tempAllocation:updateTempAllocation,
 

@@ -13,11 +13,14 @@ import R from 'ramda';
 // import actions
 import {fetchStaffInfo} from '../common/common_actions'
 // import selectors
+
 // import components
 import SetAllocationGraph  from './projects_allocation_graph';
 import SummaryGraph  from './projects_summary_graph';
+import AllocationDescription  from './projects_allocation_description';
 import ExistingAllocationGraph  from './projects_existing_staff_allocation';
 import ProjectForm  from './projects_new_project_form';
+import ProjectTimeline  from './projects_timeline';
 import ProjectFetch  from './projects_async_fetch';
 import StaffTable  from '../staff/staff_staff_table';
 import {setActiveStaffId }  from '../staff/staff_actions';
@@ -42,6 +45,8 @@ class Projects extends Component {
             <h4>Weekly allocation for {this.props.activeProjectInfo.name}</h4>
             <SummaryGraph />
             <br/>
+            <ProjectTimeline/>
+            <br/>
             {this.props.activeStaffId&&
               <h4>{`${this.props.staffInfo[this.props.activeStaffId].name}'s proposed allocation to ${this.props.activeProjectInfo.name}`}</h4>
             }
@@ -54,6 +59,9 @@ class Projects extends Component {
             </Col>
             <Col md="4">
               <ProjectForm/>
+              <br/>
+              <br/> 
+              <AllocationDescription/>
             </Col>
           </Panel>
         </Col>

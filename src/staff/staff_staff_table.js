@@ -49,7 +49,8 @@ class StaffTable extends Component {
           transformBadAllocation({
             staffmember_id:row.id,
             to_project:this.props.activeProjectInfo.id,
-            allocation: []
+            allocation: [],
+            description:''
          },
           this.props.activeProjectInfo.startdate,
           this.props.activeProjectInfo.enddate

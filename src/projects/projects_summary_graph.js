@@ -17,6 +17,7 @@ import R from 'ramda';
 import {updateActiveProjectInfo, fetchActiveProjectAllocations,updateTempAllocation}  from './projects_actions';
 import {transformBadAllocation} from '../common/common_utils'
 import {setActiveStaffId,setActiveStaffIdAppRender} from '../common/common_actions'
+import {fetchStaffmemberSkills,fetchStaffmemberAllocations} from '../staff/staff_actions'
 
 // import components
 import {StaffSymbol} from '../staff/staff_symbol'
@@ -29,16 +30,11 @@ class SummaryGraph extends Component {
   }  
 
 
-  _onSVGClick=(e)=>{
-    e.stopPropagation()
-    setActiveStaffIdAppRender(parseInt(e.target.id))
-  }
 
 
   Barcharter=(id)=>{
     var color = ''
     if(id!== 'allocation_'+this.props.activeStaffId){
-      console.log(id)
       var splitId=id.split('_')[1]
       color = this.props.staffColors[splitId]
     }else{
@@ -54,6 +50,42 @@ class SummaryGraph extends Component {
           fill={color} />)}
   } 
 
+ _onSVGClick = (e)=>{
+
+    var id = parseInt(e.target.id)
+    if(!!id){
+      this.props.setActiveStaffId(id)
+      this.props.fetchStaffmemberAllocations(this.props.userToken,id)
+      this.props.fetchStaffmemberSkills(this.props.userToken,id)
+
+      if( !!this.props.activeProjectInfo.id&&
+          !!this.props.activeProjectAllocations
+        ){
+        if(R.filter(R.propEq('staffmember_id',id),this.props.activeProjectAllocations).length>0){
+          console.log('temp allocation is happening')
+          this.props.updateTempAllocation(
+            transformBadAllocation(R.filter(R.propEq('staffmember_id',id),this.props.activeProjectAllocations)[0],
+            this.props.activeProjectInfo.startdate,
+            this.props.activeProjectInfo.enddate)
+          )
+        }else{
+          console.log('temp allocation is not happening')
+           this.props.updateTempAllocation(
+              transformBadAllocation({
+                staffmember_id:id,
+                to_project:this.props.activeProjectInfo.id,
+                allocation: []
+              },
+              this.props.activeProjectInfo.startdate,
+              this.props.activeProjectInfo.enddate
+              )
+            )
+        }
+      }
+    }
+  } 
+
+
   svgStyle={position: 'absolute',
                 top: 0,
                 left: 0,
@@ -62,7 +94,7 @@ class SummaryGraph extends Component {
   AllocatedStaff =(allocationObj,index)=>{
       var staffObj=this.props.staffInfo[allocationObj.staffmember_id]
 
-      staffObj.y=30
+      staffObj.y=20
       staffObj.x=(index*15+30)
       staffObj.color = this.props.staffColors[staffObj.id]
       return StaffSymbol(staffObj)
@@ -86,7 +118,7 @@ class SummaryGraph extends Component {
           {this.props.activeProjectAllocations.map(this.AllocatedStaff)}
          </svg>
       </div>
-         <ResponsiveContainer height={280}>
+         <ResponsiveContainer height={240}>
             <ComposedChart 
              data={this.props.stackedAllocations}
              barGap={'1em'}
@@ -124,14 +156,9 @@ const  allocationNamer=(x)=>{
 const  listMerger=(x)=>{
     if(!(typeof x[0]=='undefined')){
         return x[0].map(function(outerItem,outerIndex,arr){
-          // console.log('Getting this index')
-          // console.log(outerIndex)
-          // console.log(outerItem['day'])
           var merged= (R.mergeAll(x.map(function(item){
             return item[String(outerIndex)]
           })))
-          // console.log('Merging these items:')
-          // console.log(merged)
           return (merged)  
         })}else{
           return ([{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0},{'allocation4':0,'allocation2':0,'allocation3':0}])
@@ -159,10 +186,11 @@ const  Updater = (x,y)=>{
 }
 
 
-const mapStateToProps = ( {activeProjectAllocations,staffInfo,activeStaffId,activeProjectInfo} ) => {
+const mapStateToProps = ( {activeProjectAllocations,staffInfo,userToken,activeStaffId,activeProjectInfo} ) => {
   return {
     activeProjectInfo,
     staffInfo,
+    userToken,
     activeProjectAllocations,
     activeStaffId,
     stackedAllocations:Updater(activeProjectAllocations,activeProjectInfo),
@@ -171,7 +199,7 @@ const mapStateToProps = ( {activeProjectAllocations,staffInfo,activeStaffId,acti
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({setActiveStaffId}, dispatch)
+  return bindActionCreators({setActiveStaffId,fetchStaffmemberSkills,updateTempAllocation, fetchStaffmemberAllocations}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SummaryGraph);

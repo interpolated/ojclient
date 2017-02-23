@@ -8,8 +8,7 @@ export const StaffSymbol=(props)=>{
         fill:props.color,
         fillOpacity:0.5
     }
-    console.log('MAKING SVG CIRCLE')
-    console.log(style)
+
     return (
         <g>
           <circle 

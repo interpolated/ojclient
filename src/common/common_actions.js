@@ -5,6 +5,9 @@ import {merge} from 'lodash'
 import R from 'ramda'
 import {transformBadAllocation} from './common_utils'
 
+import {setactiveStaffId} from './common_actions'
+import {updateActiveProjectInfo, fetchActiveProjectAllocations,updateTempAllocation}  from '../projects/projects_actions';
+import {fetchStaffmemberSkills,fetchStaffmemberAllocations} from '../staff/staff_actions'
 
 export const UPDATE_STAFF_INFO = "UPDATE_STAFF_INFO"
 export const UPDATE_ALL_STAFF_INFO = "UPDATE_ALL_STAFF_INFO"
@@ -17,8 +20,6 @@ export function updateStaffInfo(payload,staffId){
     payload
   }
 }
-
-
 
 export function fetchStaffInfo(authToken){
   return dispatch=>{
@@ -54,14 +55,7 @@ export function setActiveStaffId(staffId){
 }
 
 
-//get project id
-
-// if response
-
-
-// if no response
-  // post new to projects: http://localhost:8000/api/projects/
-
+// create or update
 export const createOrUpdate=(type,data,authToken)=>{
 
   var APItype = type+'s'
@@ -71,11 +65,12 @@ export const createOrUpdate=(type,data,authToken)=>{
   if (type == 'staffMember'){
     var filter = `id=${data.id}`
   }  
-  // if we are dealing with an allocation already created it will have an id, we modify the data in place
-  // then this will work
   var newData=data
   if (type == 'allocation'){
     var filter = `staffmember_id=${data.staffmember_id}&to_project=${data.to_project}`
+  }
+  if (type == 'milestone'){
+    var filter = `id=${data.id}`
   }
   console.log('calling API '+type)
   axios.get ( `${BASE_URL}${APItype}/?${filter}`,{
@@ -93,6 +88,7 @@ export const createOrUpdate=(type,data,authToken)=>{
   })
 }
 
+
 export const deleteFromServer=(type,data,authToken)=>{
 
   var APItype = type+'s'
@@ -102,10 +98,11 @@ export const deleteFromServer=(type,data,authToken)=>{
   if (type == 'staffMember'){
     var item = `${data.id}/`
   }  
-  // if we are dealing with an allocation already created it will have an id, we modify the data in place
-  // then this will work
   var newData=data
   if (type == 'allocation'){
+    var item = `${data.id}`
+  }
+  if (type == 'milestone'){
     var item = `${data.id}`
   }
   console.log('calling API '+type)
@@ -116,40 +113,4 @@ export const deleteFromServer=(type,data,authToken)=>{
       })
   }
 
-export const setActiveStaffIdAppRender = (id)=>{
-  // need to import reducers setactiveStaffId
-  // need to to import fetchStaffMemberAllocation
-  // need to to import fetchStaffMemberSkills
-  // need to to import updateTempAllocation
-  // need to import transformBadAllocation
 
-    // console.log('yah')
-    this.props.setActiveStaffId(id)
-    this.props.fetchStaffmemberAllocations(this.props.userToken,id)
-    this.props.fetchStaffmemberSkills(this.props.userToken,id)
-    // this.props.updateTempAllocation(payload,this.props.activeProjectInfo.startdate,this.props.activeProjectInfo.enddate)
-
-    if( !!this.props.activeProjectInfo.id&&
-        !!this.props.activeProjectAllocations
-      ){
-      if(R.filter(R.propEq('staffmember_id',id),this.props.activeProjectAllocations).length>0){
-        // console.log('temp allocation is happening')
-        this.props.updateTempAllocation(
-          transformBadAllocation(R.filter(R.propEq('staffmember_id',id),this.props.activeProjectAllocations)[0],
-          this.props.activeProjectInfo.startdate,
-          this.props.activeProjectInfo.enddate)
-        )
-      }else{
-        // console.log('temp allocation is not happening')
-         this.props.updateTempAllocation(
-          transformBadAllocation({
-            staffmember_id:id,
-            to_project:this.props.activeProjectInfo.id,
-            allocation: []
-         },
-          this.props.activeProjectInfo.startdate,
-          this.props.activeProjectInfo.enddate
-      )
-    )
-  }
-}}

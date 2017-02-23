@@ -12,13 +12,13 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import R from 'ramda';
 
 // import actions
-import {updateActiveProjectInfo, fetchActiveProjectAllocations,updateTempAllocation}  from './projects_actions';
-
-
-
-// import selectors
+import {updateActiveProjectInfo, 
+        fetchActiveProjectAllocations,
+        fetchActiveProjectMilestones,
+        updateTempAllocation}  from './projects_actions';
 
 import {BASE_URL} from '../constants.js'
+
 class ProjectFetch extends Component {
   
   constructor(props) {
@@ -35,22 +35,17 @@ class ProjectFetch extends Component {
       return response.json();
       }).then((json) => {
       this.setState({projectShortList:json})
-      // return { options:R.pluck('projectId',json).map((item)=>({'value':item, 'label':item})) };
     });
   }
-
 
   componentWillMount(){
   }
 
   onRowClick= (row)=>{
-      // console.log(row.id)
-      // console.log(this.state)
-      // console.log(this.state.projectShortList)
-      // console.log(R.filter(R.propEq('id',row.id),this.state.projectShortList)[0])
       var activeP = R.filter(R.propEq('id',row.id),this.state.projectShortList)[0]
       this.props.updateActiveProjectInfo(activeP)
       this.props.fetchActiveProjectAllocations(this.props.userToken,activeP.id)
+      this.props.fetchActiveProjectMilestones(this.props.userToken,activeP.id)
       if(!!this.props.activeStaffId&&!!activeP.id){
         console.log('THIS SHOULD SET TEMP ALLOCATION')
         this.props.updateTempAllocation({
@@ -76,11 +71,8 @@ class ProjectFetch extends Component {
     this.setState({value:''})
   }
 
-
-
   render() {
     return (
-
       <Col> 
         <FormControl 
           id="projectId"
@@ -123,10 +115,6 @@ class ProjectFetch extends Component {
   }
 }
 
-
-
-
-
 const mapStateToProps = ( {activeProjectInfo,userToken,activeStaffId,activeProjectAllocations} ) => {
   return {
     activeProjectInfo,
@@ -137,7 +125,11 @@ const mapStateToProps = ( {activeProjectInfo,userToken,activeStaffId,activeProje
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({updateActiveProjectInfo,fetchActiveProjectAllocations,updateTempAllocation}, dispatch)
+  return bindActionCreators({
+    updateActiveProjectInfo,
+    fetchActiveProjectAllocations,
+    fetchActiveProjectMilestones,
+    updateTempAllocation}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectFetch);
