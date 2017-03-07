@@ -84,7 +84,7 @@ export function updateTempAllocation(state = {}, action){
   const newState = cloneDeep(state)
   switch(action.type){
   case types.UPDATE_TEMP_ALLOCATION:
-          return R.merge(newState,action.payload)
+          return Object.assign({},newState,action.payload)
   default:
     return state
   }
