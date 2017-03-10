@@ -31,7 +31,7 @@ const ProjectCard = (props)=>{
 const SkillCard = (props)=>{
   return (
       <Col md="3"  >
-        <Panel style={{backgroundColor:'#E89898'}}>
+        <Panel>
           <h4><strong>{props.name}</strong></h4>
           <h6>{props.description}</h6>
         </Panel>
