@@ -2,7 +2,7 @@ import React from 'react';
 import { Panel,Col, Button, Form, FormGroup, ControlLabel, FormControl, FieldGroup,Label, Input, FormText } from 'react-bootstrap';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
+import {hashHistory} from 'react-router';
 import {setRedirectUrl,toggleLoggedIn,setUserToken,logIn}  from './authentication_actions';
 
 
@@ -31,7 +31,7 @@ class LoginForm extends React.Component {
   handleSubmit = (e)=>{
     console.log('logging in........')
     this.props.logIn(this.state.username,this.state.password)
-    browserHistory.replace('/seats')
+    hashHistory.replace('/seats')
     e.preventDefault();
   }
 

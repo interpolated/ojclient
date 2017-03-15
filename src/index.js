@@ -11,7 +11,7 @@ import LoginRequiredContainer from './authentication/login_required_container';
 import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './reducers_index';
 import thunk from 'redux-thunk'
-import {  Router, Route, IndexRoute, Link, browserHistory  } from 'react-router';
+import {  Router, Route, IndexRoute, Link, hashHistory  } from 'react-router';
 import { enableBatching} from 'redux-batched-actions';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -26,7 +26,7 @@ window.store =  store
 // console.log(store.getState())
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
       <Route path='/' component={App}>
         <Route path='login' component={LoginForm}/>
       

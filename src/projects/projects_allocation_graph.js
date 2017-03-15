@@ -22,6 +22,8 @@ import { extendMoment } from 'moment-range';
 
 const moment = extendMoment(Moment);
 
+
+
 class SetAllocationGraph extends Component {
   constructor(props) {
     super(props);

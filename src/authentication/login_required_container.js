@@ -1,5 +1,5 @@
 import React from 'react';
-import {browserHistory } from 'react-router';
+import {hashHistory } from 'react-router';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {setRedirectUrl} from './authentication_actions';
@@ -16,7 +16,7 @@ class LoginRequiredContainer extends React.Component {
       // set the current url/path for future redirection (we use a Redux action)
       // then redirect (we use a React Router method)
       this.props.setRedirectUrl(this.props.currentURL) // dispatch currentURL to store so login can push you there
-      browserHistory.replace('/login') // user browserHistory from react-router to send you back to login
+      hashHistory.replace('/login') // user hashHistory from react-router to send you back to login
     }
   }
 

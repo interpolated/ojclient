@@ -1,5 +1,5 @@
 import {fetchStaffInfo} from '../common/common_actions'
-import {browserHistory} from 'react-router';
+import {hashHistory} from 'react-router';
 import axios from 'axios'
 import {BASE_URL} from '../constants';
 
@@ -43,7 +43,7 @@ export function logIn(username,password){
       // fetchStaffInfo could be a universal load state call - probably better that way. Keeping like this for now.
       dispatch(fetchStaffInfo(response.data.token)) 
     }).then(()=>{
-      browserHistory.replace('/seats')
+      hashHistory.replace('/seats')
     }).catch(error=>{
       console.log(error)
     })
