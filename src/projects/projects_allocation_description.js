@@ -79,7 +79,7 @@ _onChange=(e)=>{
           <Row>
             <Col md="12">
              <FieldGroup
-                componentClass="textArea"
+                componentClass="input"
                 placeholder="describe involvement in project"
                 id="projectId"
                 type="text"
